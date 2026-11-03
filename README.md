@@ -125,8 +125,9 @@ Numbered scripts form the pipeline; run them in order.
 `hubeau.py` and `bdlisa.py` are the shared modules. `bdlisa.MEDIUM_GROUPS` is
 the single place the grouping decision lives.
 
-`03a_bdlisa_check.py` runs today and passes. `01`, `02` and `04` exit with
-status 2 and a pointer to `00` while Hub'Eau is blocked.
+`03a_bdlisa_check.py` runs today and passes. Under the block, `01` and `02`
+exit 2 with the failing URL and a pointer to `00`; `03` and `04` exit 1 naming
+the upstream output they are missing. Verified: no script fails silently.
 
 ### Run order once Hub'Eau is reachable
 
