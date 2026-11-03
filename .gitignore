@@ -1,0 +1,4 @@
+# Downloaded reference data: large, reproducible from scripts/bdlisa.py
+data/bdlisa_download/
+*.gpkg
+__pycache__/
