@@ -4,13 +4,29 @@ Scientific poster on how French aquifer types (porous, fissured, karstic)
 recovered from the 2022 European drought, from Hub'Eau piezometry and the
 BDLISA aquifer classification.
 
-## Status: Step 1 gate check NOT reached
+## Status: gate check GO
 
-The go/no-go gate needs station counts from the Hub'Eau Piezometrie API.
-**Hub'Eau is unreachable from this machine**, so no station counts exist yet.
-Everything that does not depend on Hub'Eau is done and verified.
+Station counts are in, from a Hub'Eau fetch run in Google Colab
+(`scripts/colab_fetch_stations.py`) because Hub'Eau is unreachable from this
+machine. 7080 stations with >= 120 measurements; after the BDLISA join and an
+approximate date filter:
 
-Run `python scripts/00_check_connectivity.py` to see the current state.
+| Group | With BDLISA | Record filter | Final |
+|---|---|---|---|
+| porous | 2873 | 2272 | 970 |
+| fissured | 657 | 548 | 332 |
+| karstic | 219 | 141 | **105** |
+
+**GO** — all three groups are far above the 25-station threshold. Karstic is the
+binding group, as the entity-level distribution predicted, but with 105 stations
+it has ample headroom.
+
+The date filter is approximate: it uses the station metadata's first and last
+measurement dates, so it says nothing about gaps inside the window.
+`04_drought_filter.py` does the real gap check on the time series.
+
+Run `python scripts/00_check_connectivity.py` to see whether Hub'Eau is
+reachable before trying anything that calls it directly from here.
 
 ### What is blocked
 

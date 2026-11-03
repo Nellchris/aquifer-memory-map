@@ -1,0 +1,95 @@
+{
+  "parameters": {
+    "source_csv": "data\\colab_output\\stations_with_bdlisa.csv",
+    "stations_total": 7080,
+    "nb_mesures_piezo_min": 120,
+    "date_debut_mesure_on_or_before": "2010-01-01",
+    "date_fin_mesure_on_or_after": "2025-01-01",
+    "filter_is_approximate": "metadata first/last dates only; no gap check inside the window",
+    "medium_groups": {
+      "1": "porous",
+      "2": "fissured",
+      "11": "fissured",
+      "6": "fissured",
+      "3": "karstic",
+      "4": "mixed",
+      "5": "mixed",
+      "7": "mixed",
+      "8": "mixed",
+      "9": "mixed",
+      "0": "unknown",
+      "X": "unknown",
+      "10": "unknown"
+    },
+    "milieu_labels": {
+      "X": "Sans objet",
+      "0": "Inconnu",
+      "1": "Milieu poreux",
+      "2": "Milieu fissure",
+      "3": "Milieu karstique",
+      "4": "Double porosite : matricielle et de fissures",
+      "5": "Double porosite : karstique et de fissures",
+      "6": "Double porosite : de fractures et/ou de fissures",
+      "7": "Double porosite : matricielle et de fractures",
+      "8": "Double porosite : matricielle et karstique",
+      "9": "Triple porosite : matricielle, de fractures et karstique",
+      "10": "Multi-milieux",
+      "11": "Fracture"
+    },
+    "gate_thresholds": {
+      "go": 25,
+      "watch": 20
+    }
+  },
+  "join_outcomes": {
+    "level3": 3742,
+    "no_bdlisa_code": 1477,
+    "milieu_4_not_in_poster_groups": 1066,
+    "milieu_5_not_in_poster_groups": 265,
+    "milieu_8_not_in_poster_groups": 239,
+    "milieu_9_not_in_poster_groups": 160,
+    "no_bdlisa_code_in_reference": 54,
+    "milieu_X_not_in_poster_groups": 24,
+    "milieu_7_not_in_poster_groups": 21,
+    "ambiguous_fissured+porous": 19,
+    "level2_only": 7,
+    "ambiguous_karstic+porous": 6
+  },
+  "stages": {
+    "porous": {
+      "with_bdlisa": 2873,
+      "after_record_filter": 2272,
+      "final": 970
+    },
+    "fissured": {
+      "with_bdlisa": 657,
+      "after_record_filter": 548,
+      "final": 332
+    },
+    "karstic": {
+      "with_bdlisa": 219,
+      "after_record_filter": 141,
+      "final": 105
+    },
+    "mixed": {
+      "with_bdlisa": 1751,
+      "after_record_filter": 1489,
+      "final": 870
+    },
+    "unknown": {
+      "with_bdlisa": 24,
+      "after_record_filter": 17,
+      "final": 9
+    },
+    "ambiguous": {
+      "with_bdlisa": 25,
+      "after_record_filter": 20,
+      "final": 15
+    },
+    "no_bdlisa": {
+      "with_bdlisa": 1531,
+      "after_record_filter": 1327,
+      "final": 122
+    }
+  }
+}
