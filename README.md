@@ -11,15 +11,23 @@ Station counts are in, from a Hub'Eau fetch run in Google Colab
 machine. 7080 stations with >= 120 measurements; after the BDLISA join and an
 approximate date filter:
 
-| Group | With BDLISA | Record filter | Final |
-|---|---|---|---|
-| porous | 2873 | 2272 | 970 |
-| fissured | 657 | 548 | 332 |
-| karstic | 219 | 141 | **105** |
+| Group | With BDLISA | Record filter | Final | Metropolitan |
+|---|---|---|---|---|
+| porous | 2873 | 2272 | 970 | 956 |
+| fissured | 657 | 548 | 332 | 260 |
+| karstic | 219 | 141 | 105 | **104** |
 
 **GO** — all three groups are far above the 25-station threshold. Karstic is the
-binding group, as the entity-level distribution predicted, but with 105 stations
-it has ample headroom.
+binding group, as the entity-level distribution predicted, but with 104
+metropolitan stations it has ample headroom.
+
+The gate is taken on the metropolitan column. The Hub'Eau fetch is France-wide,
+so it includes 290 stations in Reunion, Guadeloupe, Martinique, Mayotte and
+Guyane, which were not in the 2022 European drought at all — Reunion is in the
+southern hemisphere. They fall almost entirely in the fissured group (72 of 332,
+22%), because Reunion's volcanic formations are coded fissured, so leaving them
+in would have quietly mixed tropical volcanic aquifers into the European
+fissured signal.
 
 The date filter is approximate: it uses the station metadata's first and last
 measurement dates, so it says nothing about gaps inside the window.

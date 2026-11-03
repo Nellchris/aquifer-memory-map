@@ -59,37 +59,51 @@
     "porous": {
       "with_bdlisa": 2873,
       "after_record_filter": 2272,
-      "final": 970
+      "final": 970,
+      "final_metropolitan": 956,
+      "final_overseas": 14
     },
     "fissured": {
       "with_bdlisa": 657,
       "after_record_filter": 548,
-      "final": 332
+      "final": 332,
+      "final_metropolitan": 260,
+      "final_overseas": 72
     },
     "karstic": {
       "with_bdlisa": 219,
       "after_record_filter": 141,
-      "final": 105
+      "final": 105,
+      "final_metropolitan": 104,
+      "final_overseas": 1
     },
     "mixed": {
       "with_bdlisa": 1751,
       "after_record_filter": 1489,
-      "final": 870
+      "final": 870,
+      "final_metropolitan": 832,
+      "final_overseas": 38
     },
     "unknown": {
       "with_bdlisa": 24,
       "after_record_filter": 17,
-      "final": 9
+      "final": 9,
+      "final_metropolitan": 7,
+      "final_overseas": 2
     },
     "ambiguous": {
       "with_bdlisa": 25,
       "after_record_filter": 20,
-      "final": 15
+      "final": 15,
+      "final_metropolitan": 15,
+      "final_overseas": 0
     },
     "no_bdlisa": {
       "with_bdlisa": 1531,
       "after_record_filter": 1327,
-      "final": 122
+      "final": 122,
+      "final_metropolitan": 118,
+      "final_overseas": 4
     }
   }
 }

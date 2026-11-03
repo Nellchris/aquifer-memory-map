@@ -23,6 +23,7 @@ import bdlisa  # noqa: E402
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 STATIONS_CSV = DATA / "colab_output" / "stations_with_bdlisa.csv"
+STATIONS_RAW = DATA / "colab_output" / "stations_raw.json"
 TME = DATA / "bdlisa_download" / "TME.csv"
 
 # Approximate coverage thresholds, applied to station metadata dates.
@@ -31,6 +32,25 @@ END_AFTER = "2025-01-01"  # record still running through the recovery window
 
 GATE_GO = 25
 GATE_WATCH = 20
+
+
+def load_departments():
+    """{code_bss: code_departement}, for excluding the overseas departments.
+
+    The fetch is France-wide, so it includes Reunion, Guadeloupe, Martinique,
+    Mayotte and Guyane. Those sit outside the 2022 European drought entirely --
+    Reunion is in the southern hemisphere -- so the poster needs metropolitan
+    stations only.
+    """
+    if not STATIONS_RAW.exists():
+        print(f"  {STATIONS_RAW.name} missing; cannot split metropolitan/overseas")
+        return {}
+    raw = json.loads(STATIONS_RAW.read_text(encoding="utf-8"))
+    return {s.get("code_bss"): str(s.get("code_departement") or "") for s in raw}
+
+
+def is_metropolitan(code_dept):
+    return bool(code_dept) and code_dept[:2] not in ("97", "98")
 
 
 def load_entities():
@@ -42,6 +62,7 @@ def load_entities():
 def main():
     stations = list(csv.DictReader(STATIONS_CSV.open(encoding="utf-8")))
     table = load_entities()
+    depts = load_departments()
     print(f"{len(stations)} stations, {len(table)} BDLISA entities")
 
     has_codes = [s for s in stations if s["codes_bdlisa"].strip()]
@@ -77,6 +98,7 @@ def main():
             "date_debut": s["date_debut_mesure"],
             "date_fin": s["date_fin_mesure"],
             "bdlisa_source": source,
+            "code_departement": depts.get(s["code_bss"], ""),
         })
 
     print("\njoin outcomes:")
@@ -102,10 +124,13 @@ def main():
         in_group = [r for r in rows if r["aquifer_medium"] == label]
         after_start = [r for r in in_group if passes_start(r)]
         final = [r for r in after_start if passes_end(r)]
+        metro = [r for r in final if is_metropolitan(r["code_departement"])]
         stage_counts[label] = {
             "with_bdlisa": len(in_group),
             "after_record_filter": len(after_start),
             "final": len(final),
+            "final_metropolitan": len(metro),
+            "final_overseas": len(final) - len(metro),
         }
 
     counts = {
@@ -135,12 +160,14 @@ def main():
     print("=" * 72)
     print("GATE CHECK - Station Counts")
     print("=" * 72)
-    print(f"{'':<22}|{'With BDLISA':>13} |{'Record filter':>15} |{'Final':>8}")
+    print(f"{'':<22}|{'With BDLISA':>13} |{'Record filter':>15} |"
+          f"{'Final':>8} |{'Metropolitan':>13}")
     print(line)
     for g in bdlisa.POSTER_GROUPS:
         c = stage_counts[g]
         print(f"{g.capitalize():<22}|{c['with_bdlisa']:>13} |"
-              f"{c['after_record_filter']:>15} |{c['final']:>8}")
+              f"{c['after_record_filter']:>15} |{c['final']:>8} |"
+              f"{c['final_metropolitan']:>13}")
     print(line)
     for label, shown in (("mixed", "Mixed (excluded)"),
                          ("unknown", "Unknown (excluded)"),
@@ -148,12 +175,15 @@ def main():
                          ("no_bdlisa", "No BDLISA code")):
         c = stage_counts[label]
         print(f"{shown:<22}|{c['with_bdlisa']:>13} |"
-              f"{c['after_record_filter']:>15} |{'-':>8}")
+              f"{c['after_record_filter']:>15} |{'-':>8} |{'-':>13}")
     print(line)
     print(f"Record filter: date_debut_mesure <= {START_BY}")
     print(f"Final:         plus date_fin_mesure >= {END_AFTER}")
+    print("Metropolitan:  Final minus the overseas departments (97x/98x)")
 
-    finals = [stage_counts[g]["final"] for g in bdlisa.POSTER_GROUPS]
+    # Gate on the metropolitan counts: the overseas departments were not in
+    # the 2022 European drought.
+    finals = [stage_counts[g]["final_metropolitan"] for g in bdlisa.POSTER_GROUPS]
     worst = min(finals)
     print()
     if worst >= GATE_GO:
@@ -164,7 +194,9 @@ def main():
     else:
         print(f"NO-GO: a group is < {GATE_WATCH} - widen the criteria")
     for g in bdlisa.POSTER_GROUPS:
-        print(f"   {g:<10} {stage_counts[g]['final']:>5}")
+        c = stage_counts[g]
+        print(f"   {g:<10} {c['final_metropolitan']:>5} metropolitan "
+              f"({c['final_overseas']} overseas excluded)")
 
 
 if __name__ == "__main__":
