@@ -2,3 +2,6 @@
 data/bdlisa_download/
 *.gpkg
 __pycache__/
+
+# Raw Colab fetch output: large and reproducible from scripts/colab_fetch_stations.py
+data/colab_output/stations_raw.json
