@@ -10,3 +10,6 @@ data/colab_output/stations_raw.json
 data/colab_chroniques/
 data/monthly_levels.csv
 data/_permonth_counts.json
+
+# France boundary, re-downloadable from github.com/gregoiredavid/france-geojson
+data/boundary/

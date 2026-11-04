@@ -24,17 +24,17 @@
   },
   "logrank_bonferroni": {
     "porous vs fissured": {
-      "chi2": 39.4032,
-      "p_bonferroni": 1.0341838282076985e-09
+      "chi2": 39.3833,
+      "p_bonferroni": 1.0448065160931114e-09
     },
     "porous vs karstic": {
-      "chi2": 7.4573,
-      "p_bonferroni": 0.018953921989348047
+      "chi2": 7.4125,
+      "p_bonferroni": 0.019431629974765045
     },
     "fissured vs karstic": {
-      "chi2": 46.8265,
-      "p_bonferroni": 2.326742106611818e-11
+      "chi2": 46.6071,
+      "p_bonferroni": 2.6023421256278834e-11
     }
   },
-  "note": "censored at the Dec 2025 horizon, encoded as 48 months with event=0"
+  "note": "each censored station contributes its own observation time: months from its drought minimum to the earlier of Dec 2025 and the end of its record"
 }
