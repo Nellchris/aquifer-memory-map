@@ -1,0 +1,433 @@
+{
+  "parameters": {
+    "min_obs_per_month": 3,
+    "min_obs_per_month_rationale": "brief asked 10; 100 stations are read weekly and 36 monthly, and all stations lost at 10 are porous, so 10 would bias the between-group comparison. Sensitivity run reported separately.",
+    "reference_period": [
+      "2000-01",
+      "2019-12"
+    ],
+    "min_reference_years_per_calendar_month": 10,
+    "drought_window": [
+      "2022-06",
+      "2023-03"
+    ],
+    "recovery_rule": "first of 2 consecutive months with monthly median >= calendar-month normal; a missing month breaks the run",
+    "censor_at": "2025-12"
+  },
+  "station_flow": {
+    "dropped_no_drought_window_data": 3,
+    "dropped_no_month_meets_min_obs": 5,
+    "dropped_no_month_porous": 5,
+    "dropped_normals_filter": 109,
+    "drought_ok_fissured": 253,
+    "drought_ok_karstic": 95,
+    "drought_ok_porous": 853,
+    "has_monthly_data": 1313,
+    "normals_fail_fissured": 7,
+    "normals_fail_karstic": 8,
+    "normals_fail_porous": 94,
+    "normals_ok_fissured": 253,
+    "normals_ok_karstic": 96,
+    "normals_ok_porous": 855,
+    "profondeur_duplicates_niveau": 57,
+    "stations_in_file": 1318,
+    "survived_drought_window": 1201,
+    "survived_normals": 1204
+  },
+  "stations_skipped_at_fetch": [
+    "BSS003PAFM/X\tporous\tno data returned",
+    "BSS003PAFQ/X\tporous\tno data returned"
+  ],
+  "profondeur_duplicates_niveau_kept": [
+    {
+      "code_bss": "05068X0028/SP010",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "07022X0053/F1",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06552X0014/F1",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06781X0054/F1",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06783X0008/F1",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "07034X0008/F1",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06101X0202/SP1",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06541X0007/PI2",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "05634X0013/SF3",
+      "aquifer_medium": "fissured"
+    },
+    {
+      "code_bss": "08466X0023/S3",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "05342X0034/F4",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "08465X0019/S5",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "08465X0020/S6",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "07013X0011/F225A",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06298X0035/F210C",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "00215X0187/PZAE",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06301X0131/F",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06091X0541/F",
+      "aquifer_medium": "fissured"
+    },
+    {
+      "code_bss": "07011X0112/F",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06555X0003/F",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "05635X0154/F",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "05625X0036/F",
+      "aquifer_medium": "fissured"
+    },
+    {
+      "code_bss": "05612X0007/F",
+      "aquifer_medium": "fissured"
+    },
+    {
+      "code_bss": "07014X0028/F",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "07263X0088/F",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "05076X0019/F",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06547X0064/PIEZO",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "05366X0035/PIEZO",
+      "aquifer_medium": "fissured"
+    },
+    {
+      "code_bss": "05863X0206/PIEZO",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "07223X0130/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "07224X0140/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "05842X0011/P",
+      "aquifer_medium": "fissured"
+    },
+    {
+      "code_bss": "06546X0091/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "07223X0132/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "07224X0142/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06987X0272/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "07223X0133/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "07224X0143/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "07231X0263/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "07224X0144/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06995X0274/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06987X0274/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06988X0216/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06988X0217/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06792X0057/P",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "05866X0091/SR",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "05865X0126/S",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06988X0047/S",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "07032X0008/S",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06991X0220/PZ",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06757X0071/PZ",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06988B0344/PZ",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06987J0105/PZ",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "06744X0025/PZ",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "05857X0145/PZ",
+      "aquifer_medium": "porous"
+    },
+    {
+      "code_bss": "05854X0047/PZ",
+      "aquifer_medium": "fissured"
+    },
+    {
+      "code_bss": "06503X0028/PZ",
+      "aquifer_medium": "porous"
+    }
+  ],
+  "primary": {
+    "groups": {
+      "porous": {
+        "n": 763,
+        "median_recovery_months": 8.0,
+        "q1": 1.0,
+        "q3": 15.0,
+        "iqr": 14.0,
+        "min": 0.0,
+        "max": 36.0,
+        "mean": 8.727,
+        "n_censored": 90,
+        "n_total": 853,
+        "censored_fraction": 0.1055
+      },
+      "fissured": {
+        "n": 247,
+        "median_recovery_months": 6.0,
+        "q1": 2.0,
+        "q3": 12.0,
+        "iqr": 10.0,
+        "min": 0.0,
+        "max": 25.0,
+        "mean": 7.049,
+        "n_censored": 6,
+        "n_total": 253,
+        "censored_fraction": 0.0237
+      },
+      "karstic": {
+        "n": 81,
+        "median_recovery_months": 12.0,
+        "q1": 5.0,
+        "q3": 17.0,
+        "iqr": 12.0,
+        "min": 0.0,
+        "max": 39.0,
+        "mean": 12.148,
+        "n_censored": 14,
+        "n_total": 95,
+        "censored_fraction": 0.1474
+      }
+    },
+    "kruskal_wallis": {
+      "H": 21.2727,
+      "p_value": 2.402680331282981e-05,
+      "df": 2,
+      "groups_tested": [
+        "porous",
+        "fissured",
+        "karstic"
+      ],
+      "n_total": 1091
+    },
+    "dunn_bonferroni": {
+      "porous vs fissured": {
+        "z": 2.1822,
+        "p_unadjusted": 0.029093993738010266,
+        "p_bonferroni": 0.0872819812140308
+      },
+      "porous vs karstic": {
+        "z": -3.681,
+        "p_unadjusted": 0.0002322784495173058,
+        "p_bonferroni": 0.0006968353485519174
+      },
+      "fissured vs karstic": {
+        "z": -4.6073,
+        "p_unadjusted": 4.079201405214589e-06,
+        "p_bonferroni": 1.2237604215643767e-05
+      }
+    }
+  },
+  "sensitivity_min_obs_10": {
+    "station_flow": {
+      "dropped_no_drought_window_data": 2,
+      "dropped_no_month_meets_min_obs": 92,
+      "dropped_no_month_porous": 92,
+      "dropped_normals_filter": 152,
+      "drought_ok_fissured": 244,
+      "drought_ok_karstic": 95,
+      "drought_ok_porous": 733,
+      "has_monthly_data": 1226,
+      "normals_fail_fissured": 16,
+      "normals_fail_karstic": 8,
+      "normals_fail_porous": 128,
+      "normals_ok_fissured": 244,
+      "normals_ok_karstic": 96,
+      "normals_ok_porous": 734,
+      "profondeur_duplicates_niveau": 57,
+      "stations_in_file": 1318,
+      "survived_drought_window": 1072,
+      "survived_normals": 1074
+    },
+    "groups": {
+      "porous": {
+        "n": 654,
+        "median_recovery_months": 8.0,
+        "q1": 1.0,
+        "q3": 15.0,
+        "iqr": 14.0,
+        "min": 0.0,
+        "max": 31.0,
+        "mean": 8.862,
+        "n_censored": 79,
+        "n_total": 733,
+        "censored_fraction": 0.1078
+      },
+      "fissured": {
+        "n": 238,
+        "median_recovery_months": 6.0,
+        "q1": 2.0,
+        "q3": 12.0,
+        "iqr": 10.0,
+        "min": 0.0,
+        "max": 25.0,
+        "mean": 6.987,
+        "n_censored": 6,
+        "n_total": 244,
+        "censored_fraction": 0.0246
+      },
+      "karstic": {
+        "n": 81,
+        "median_recovery_months": 12.0,
+        "q1": 5.0,
+        "q3": 17.0,
+        "iqr": 12.0,
+        "min": 0.0,
+        "max": 39.0,
+        "mean": 12.148,
+        "n_censored": 14,
+        "n_total": 95,
+        "censored_fraction": 0.1474
+      }
+    },
+    "kruskal_wallis": {
+      "H": 22.2561,
+      "p_value": 1.4693983343366119e-05,
+      "df": 2,
+      "groups_tested": [
+        "porous",
+        "fissured",
+        "karstic"
+      ],
+      "n_total": 973
+    },
+    "dunn_bonferroni": {
+      "porous vs fissured": {
+        "z": 2.4951,
+        "p_unadjusted": 0.012592281266837558,
+        "p_bonferroni": 0.037776843800512674
+      },
+      "porous vs karstic": {
+        "z": -3.5167,
+        "p_unadjusted": 0.00043699147148769407,
+        "p_bonferroni": 0.0013109744144630823
+      },
+      "fissured vs karstic": {
+        "z": -4.6885,
+        "p_unadjusted": 2.7518338950744295e-06,
+        "p_bonferroni": 8.255501685223288e-06
+      }
+    }
+  }
+}

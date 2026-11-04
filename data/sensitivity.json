@@ -1,0 +1,242 @@
+[
+  {
+    "label": "A. As reported (2 consecutive months, all stations)",
+    "groups": {
+      "porous": {
+        "n": 763,
+        "n_censored": 90,
+        "median": 8.0,
+        "q1": 1.0,
+        "q3": 15.0
+      },
+      "fissured": {
+        "n": 247,
+        "n_censored": 6,
+        "median": 6.0,
+        "q1": 2.0,
+        "q3": 12.0
+      },
+      "karstic": {
+        "n": 81,
+        "n_censored": 14,
+        "median": 12.0,
+        "q1": 5.0,
+        "q3": 17.0
+      }
+    },
+    "kruskal": {
+      "H": 19.037,
+      "p": 7.348862772555457e-05
+    }
+  },
+  {
+    "label": "B. 1 month above normal instead of 2",
+    "groups": {
+      "porous": {
+        "n": 781,
+        "n_censored": 72,
+        "median": 4.0,
+        "q1": 1.0,
+        "q3": 13.0
+      },
+      "fissured": {
+        "n": 250,
+        "n_censored": 3,
+        "median": 3.0,
+        "q1": 2.0,
+        "q3": 9.0
+      },
+      "karstic": {
+        "n": 82,
+        "n_censored": 13,
+        "median": 7.5,
+        "q1": 2.0,
+        "q3": 14.75
+      }
+    },
+    "kruskal": {
+      "H": 9.426,
+      "p": 0.0089769709326108
+    }
+  },
+  {
+    "label": "C. 3 consecutive months above normal",
+    "groups": {
+      "porous": {
+        "n": 747,
+        "n_censored": 106,
+        "median": 11.0,
+        "q1": 2.0,
+        "q3": 15.0
+      },
+      "fissured": {
+        "n": 246,
+        "n_censored": 7,
+        "median": 9.0,
+        "q1": 5.0,
+        "q3": 13.0
+      },
+      "karstic": {
+        "n": 80,
+        "n_censored": 15,
+        "median": 14.5,
+        "q1": 9.75,
+        "q3": 19.0
+      }
+    },
+    "kruskal": {
+      "H": 20.007,
+      "p": 4.524183250861866e-05
+    }
+  },
+  {
+    "label": "D. Only stations that actually fell below normal",
+    "groups": {
+      "porous": {
+        "n": 633,
+        "n_censored": 90,
+        "median": 11.0,
+        "q1": 4.0,
+        "q3": 15.0
+      },
+      "fissured": {
+        "n": 225,
+        "n_censored": 5,
+        "median": 6.0,
+        "q1": 4.0,
+        "q3": 12.0
+      },
+      "karstic": {
+        "n": 73,
+        "n_censored": 14,
+        "median": 14.0,
+        "q1": 8.0,
+        "q3": 17.0
+      }
+    },
+    "kruskal": {
+      "H": 36.936,
+      "p": 9.538709088581652e-09
+    }
+  },
+  {
+    "label": "E. Below normal AND 1-month rule",
+    "groups": {
+      "porous": {
+        "n": 651,
+        "n_censored": 72,
+        "median": 7.0,
+        "q1": 2.0,
+        "q3": 14.0
+      },
+      "fissured": {
+        "n": 227,
+        "n_censored": 3,
+        "median": 4.0,
+        "q1": 2.0,
+        "q3": 10.0
+      },
+      "karstic": {
+        "n": 74,
+        "n_censored": 13,
+        "median": 9.0,
+        "q1": 3.0,
+        "q3": 15.0
+      }
+    },
+    "kruskal": {
+      "H": 24.875,
+      "p": 3.966077196869979e-06
+    }
+  },
+  {
+    "label": "depth band -0.1 to -0.5 m below normal",
+    "groups": {
+      "porous": {
+        "n": 327,
+        "n_censored": 13,
+        "median": 8.0,
+        "q1": 3.0,
+        "q3": 15.0
+      },
+      "fissured": {
+        "n": 79,
+        "n_censored": 3,
+        "median": 6.0,
+        "q1": 3.0,
+        "q3": 10.5
+      },
+      "karstic": {
+        "n": 14,
+        "n_censored": 4,
+        "median": 12.0,
+        "q1": 5.0,
+        "q3": 14.75
+      }
+    },
+    "kruskal": {
+      "H": 10.779,
+      "p": 0.004563342658559998
+    }
+  },
+  {
+    "label": "depth band -0.5 to -1.0 m below normal",
+    "groups": {
+      "porous": {
+        "n": 125,
+        "n_censored": 20,
+        "median": 14.0,
+        "q1": 8.0,
+        "q3": 17.0
+      },
+      "fissured": {
+        "n": 57,
+        "n_censored": 1,
+        "median": 7.0,
+        "q1": 4.0,
+        "q3": 12.0
+      },
+      "karstic": {
+        "n": 14,
+        "n_censored": 3,
+        "median": 15.0,
+        "q1": 9.0,
+        "q3": 16.75
+      }
+    },
+    "kruskal": {
+      "H": 21.174,
+      "p": 2.5245738552099465e-05
+    }
+  },
+  {
+    "label": "depth band -1.0 to -3.0 m below normal",
+    "groups": {
+      "porous": {
+        "n": 83,
+        "n_censored": 36,
+        "median": 15.0,
+        "q1": 9.0,
+        "q3": 19.0
+      },
+      "fissured": {
+        "n": 55,
+        "n_censored": 0,
+        "median": 11.0,
+        "q1": 4.0,
+        "q3": 12.0
+      },
+      "karstic": {
+        "n": 21,
+        "n_censored": 1,
+        "median": 11.0,
+        "q1": 8.0,
+        "q3": 14.0
+      }
+    },
+    "kruskal": {
+      "H": 16.295,
+      "p": 0.0002894955561174456
+    }
+  }
+]

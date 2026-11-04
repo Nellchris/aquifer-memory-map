@@ -1,0 +1,40 @@
+{
+  "groups": {
+    "porous": {
+      "n": 853,
+      "events": 763,
+      "censored": 90,
+      "km_median_months": 9.0,
+      "unrecovered_at_24_months": 0.1313
+    },
+    "fissured": {
+      "n": 253,
+      "events": 247,
+      "censored": 6,
+      "km_median_months": 6.0,
+      "unrecovered_at_24_months": 0.0277
+    },
+    "karstic": {
+      "n": 95,
+      "events": 81,
+      "censored": 14,
+      "km_median_months": 14.0,
+      "unrecovered_at_24_months": 0.2
+    }
+  },
+  "logrank_bonferroni": {
+    "porous vs fissured": {
+      "chi2": 39.4032,
+      "p_bonferroni": 1.0341838282076985e-09
+    },
+    "porous vs karstic": {
+      "chi2": 7.4573,
+      "p_bonferroni": 0.018953921989348047
+    },
+    "fissured vs karstic": {
+      "chi2": 46.8265,
+      "p_bonferroni": 2.326742106611818e-11
+    }
+  },
+  "note": "censored at the Dec 2025 horizon, encoded as 48 months with event=0"
+}
