@@ -13,3 +13,6 @@ data/_permonth_counts.json
 
 # France boundary, re-downloadable from github.com/gregoiredavid/france-geojson
 data/boundary/
+
+# Natural Earth shaded relief: 131 MB, re-downloadable (see scripts/09_maps.py)
+data/basemap/

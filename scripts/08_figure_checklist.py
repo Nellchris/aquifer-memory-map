@@ -11,6 +11,8 @@ EXPECTED = [
     ("fig4_boxplot", ["pdf", "png"], "Pooled box plot with strip"),
     ("fig5_method_inset", ["pdf", "png"], "Method inset hydrograph"),
     ("fig6_cross_section", ["pdf", "png", "svg"], "Conceptual cross-section"),
+    ("fig7_map_medium", ["pdf", "png"], "Station network by aquifer medium"),
+    ("fig8_map_severity", ["pdf", "png"], "Drought severity, departure from normal"),
 ]
 
 
