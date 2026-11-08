@@ -12,7 +12,6 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.lines import Line2D
-from matplotlib.patches import Rectangle
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import fig_style as S  # noqa: E402
@@ -63,81 +62,28 @@ def month_index(ym):
     return int(y) * 12 + int(m) - 1
 
 
-# ----------------------------------------------------------------- figure 1
-def fig1_map():
-    import geopandas as gpd
-    from shapely.geometry import Point
-
-    rec = load_recovery()
-    coords = load_coords()
-
-    france = gpd.read_file(DATA / "boundary" / "metropole.geojson").to_crs(2154)
-
-    pts, months, cens_pts = [], [], []
-    for r in rec:
-        xy = coords.get(r["code_bss"])
-        if not xy:
-            continue
-        if r["censored"]:
-            cens_pts.append(Point(xy))
-        else:
-            pts.append(Point(xy))
-            months.append(r["months"])
-
-    recovered = gpd.GeoDataFrame({"months": months}, geometry=pts, crs=4326).to_crs(2154)
-    censored = gpd.GeoDataFrame(geometry=cens_pts, crs=4326).to_crs(2154)
-
-    fig, ax = plt.subplots(figsize=(8.4, 8.8))
-    france.plot(ax=ax, facecolor="#f4f3ef", edgecolor="#b9b7ae", linewidth=0.8, zorder=1)
-
-    censored.plot(ax=ax, color=S.CENSORED_GREY, markersize=13, marker="x",
-                  linewidth=0.9, zorder=2, label="Not recovered by Dec 2025")
-    sc = ax.scatter(recovered.geometry.x, recovered.geometry.y,
-                    c=recovered["months"], cmap=S.sequential_cmap(), vmin=0, vmax=36,
-                    s=20, linewidths=0.35, edgecolors="white", zorder=3)
-
-    cbar = fig.colorbar(sc, ax=ax, shrink=0.46, pad=0.015, aspect=18)
-    cbar.set_label("Months to recovery", color=S.INK)
-    cbar.outline.set_visible(False)
-    cbar.ax.tick_params(labelsize=10.5, color=S.GRID)
-
-    ax.set_title("Groundwater recovery from the 2022 drought",
-                 loc="left", color=S.INK, pad=12, fontsize=14)
-    ax.text(0, 1.012, "{} metropolitan piezometers · months until the water table "
-            "returned to its 2000-2019 monthly normal".format(len(rec)),
-            transform=ax.transAxes, fontsize=10.5, color=S.INK_SECONDARY)
-
-    # Scale bar: 200 km in Lambert-93, where map units are metres.
-    x0, x1 = ax.get_xlim()
-    y0, y1 = ax.get_ylim()
-    bx, by = x0 + 0.06 * (x1 - x0), y0 + 0.07 * (y1 - y0)
-    ax.add_patch(Rectangle((bx, by), 200_000, 0.008 * (y1 - y0),
-                           facecolor=S.INK, edgecolor="none", zorder=4))
-    ax.text(bx + 100_000, by + 0.022 * (y1 - y0), "200 km", ha="center",
-            fontsize=10.5, color=S.INK)
-
-    nx, ny = x1 - 0.09 * (x1 - x0), y1 - 0.17 * (y1 - y0)
-    ax.annotate("N", xy=(nx, ny), xytext=(nx, ny - 0.07 * (y1 - y0)),
-                ha="center", fontsize=11.5, color=S.INK,
-                arrowprops=dict(arrowstyle="-|>", color=S.INK, linewidth=1.4))
-
-    ax.legend(loc="upper left", frameon=False, fontsize=10.5,
-              bbox_to_anchor=(0.0, 0.92))
-    ax.set_axis_off()
-    ax.set_aspect("equal")
-    return S.save(fig, "fig1_map_recovery")
+# Figure 1 lives in 09_maps.py, which draws it on a shaded-relief basemap.
+# It used to be here on a bare outline; keeping both meant whichever script ran
+# last won, and 06 silently overwrote the upgraded map.
 
 
-# ----------------------------------------------------------------- figure 2
 def fig2_depth_matched():
-    sens = json.loads((DATA / "sensitivity.json").read_text(encoding="utf-8"))
-    bands = [r for r in sens if r["label"].startswith("depth band")]
-    titles = ["Shallow\n0.1-0.5 m below normal",
-              "Moderate\n0.5-1.0 m below normal",
-              "Deep\n1.0-3.0 m below normal"]
+    """Recovery by medium, with stations matched on standardised severity.
 
-    fig, axes = plt.subplots(1, 3, figsize=(11.6, 5.0), sharey=True)
-    for ax, band, title in zip(axes, bands, titles):
+    Severity is departure divided by the station's own normal-band IQR, not
+    absolute metres: the median IQR runs 0.47 m (porous) to 0.87 m (karstic),
+    so a fixed drop in metres is a much milder event in karst. Matching on
+    metres is what produced the apparent ranking reversal in the deepest band;
+    it does not survive this normalisation, so the annotation is gone.
+    """
+    bands = json.loads(
+        (DATA / "depth_matched_standardised.json").read_text(encoding="utf-8"))
+    order = ["Mild", "Moderate", "Severe"]
+
+    fig, axes = plt.subplots(1, 3, figsize=(11.8, 5.0), sharey=True)
+    for ax, name in zip(axes, order):
+        band = bands[name]
+        lo, hi = band["range_iqr"]
         for i, g in enumerate(S.GROUPS):
             e = band["groups"][g]
             if e["median"] is None:
@@ -148,36 +94,34 @@ def fig2_depth_matched():
             ax.plot([e["median"]], [i], marker=S.MEDIUM_MARKER[g], markersize=12,
                     color=colour, markeredgecolor="white", markeredgewidth=1.4,
                     zorder=3)
-            # Direct label: identity and value never rely on colour alone.
-            ax.text(e["median"], i - 0.3, "{:.0f} mo".format(e["median"]),
+            # Direct label: value and identity never rest on colour alone.
+            med = e["median"]
+            # 15.5 must not print as "16": show the half when there is one.
+            label = "{:.0f} mo".format(med) if med == int(med)                 else "{:.1f} mo".format(med)
+            ax.text(med, i - 0.30, label,
                     ha="center", va="top", fontsize=10.5, color=S.INK)
-            ax.text(21.5, i, "n={}".format(e["n"]), ha="right", va="center",
+            ax.text(27.6, i, "n={}".format(e["n"]), ha="right", va="center",
                     fontsize=10, color=S.INK_MUTED)
 
         ax.set_yticks(range(len(S.GROUPS)))
         ax.set_yticklabels([S.MEDIUM_LABEL[g] for g in S.GROUPS])
-        ax.set_xlim(0, 22)
+        ax.set_xlim(0, 28)
+        ax.set_xticks([0, 5, 10, 15, 20, 25])
         ax.set_ylim(-0.75, len(S.GROUPS) - 0.25)
         ax.invert_yaxis()
-        ax.set_title(title, fontsize=11.5, color=S.INK, pad=10)
+        ax.set_title("{}\n{}-{} IQR below normal".format(name, lo, hi),
+                     fontsize=11.5, color=S.INK, pad=10)
         ax.set_xlabel("Months to recovery")
         ax.grid(axis="x", linewidth=0.6)
         ax.grid(axis="y", visible=False)
 
-    # Mark the reversal in the deepest band.
-    deep = bands[2]["groups"]
-    axes[2].annotate(
-        "ranking reverses:\nporous now slowest",
-        xy=(deep["porous"]["median"], 0.22), xytext=(2.0, 1.30),
-        fontsize=10.5, color=S.INK, ha="left", va="center",
-        arrowprops=dict(arrowstyle="-|>", color=S.INK, linewidth=1.2,
-                        shrinkB=10, connectionstyle="arc3,rad=-0.3"))
-
-    fig.suptitle("Recovery time depends on how far the water table fell",
+    fig.suptitle("Recovery time depends on drought severity relative to "
+                 "local variability",
                  x=0.011, ha="left", fontsize=14, color=S.INK, y=1.02)
-    fig.text(0.011, 0.955, "Median months to recovery with interquartile range, "
-             "stations matched on drought severity. Fissured is fastest in every "
-             "band.", fontsize=10.5, color=S.INK_SECONDARY, ha="left")
+    fig.text(0.011, 0.955,
+             "Median months to recovery with IQR. Severity = departure "
+             "÷ station's normal-band IQR. Fissured is fastest in every band.",
+             fontsize=10.5, color=S.INK_SECONDARY, ha="left")
     fig.tight_layout(rect=(0, 0, 1, 0.93))
     return S.save(fig, "fig2_depth_matched")
 
@@ -389,7 +333,7 @@ def fig5_method_inset():
 def main():
     S.apply_style()
     written = []
-    for fn in (fig1_map, fig2_depth_matched, fig3_kaplan_meier,
+    for fn in (fig2_depth_matched, fig3_kaplan_meier,
                fig4_boxplot, fig5_method_inset):
         paths = fn()
         written.extend(paths)

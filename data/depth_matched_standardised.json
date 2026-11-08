@@ -1,0 +1,134 @@
+{
+  "Mild": {
+    "band": "Mild",
+    "range_iqr": [
+      0.25,
+      1.0
+    ],
+    "groups": {
+      "porous": {
+        "n": 306,
+        "n_censored": 18,
+        "median": 11.0,
+        "q1": 4.0,
+        "q3": 15.0
+      },
+      "fissured": {
+        "n": 97,
+        "n_censored": 4,
+        "median": 5.0,
+        "q1": 2.0,
+        "q3": 12.0
+      },
+      "karstic": {
+        "n": 32,
+        "n_censored": 1,
+        "median": 12.0,
+        "q1": 7.75,
+        "q3": 15.25
+      }
+    },
+    "kruskal": {
+      "H": 26.713,
+      "p": 1.5826261743980358e-06,
+      "groups_tested": [
+        "porous",
+        "fissured",
+        "karstic"
+      ]
+    },
+    "order_fastest_to_slowest": [
+      "fissured",
+      "porous",
+      "karstic"
+    ]
+  },
+  "Moderate": {
+    "band": "Moderate",
+    "range_iqr": [
+      1.0,
+      2.0
+    ],
+    "groups": {
+      "porous": {
+        "n": 192,
+        "n_censored": 48,
+        "median": 12.0,
+        "q1": 4.75,
+        "q3": 16.0
+      },
+      "fissured": {
+        "n": 66,
+        "n_censored": 0,
+        "median": 10.5,
+        "q1": 6.0,
+        "q3": 13.0
+      },
+      "karstic": {
+        "n": 21,
+        "n_censored": 5,
+        "median": 15.0,
+        "q1": 11.0,
+        "q3": 19.0
+      }
+    },
+    "kruskal": {
+      "H": 6.572,
+      "p": 0.037408602048703304,
+      "groups_tested": [
+        "porous",
+        "fissured",
+        "karstic"
+      ]
+    },
+    "order_fastest_to_slowest": [
+      "fissured",
+      "porous",
+      "karstic"
+    ]
+  },
+  "Severe": {
+    "band": "Severe",
+    "range_iqr": [
+      2.0,
+      6.0
+    ],
+    "groups": {
+      "porous": {
+        "n": 47,
+        "n_censored": 23,
+        "median": 15.0,
+        "q1": 9.0,
+        "q3": 17.0
+      },
+      "fissured": {
+        "n": 33,
+        "n_censored": 1,
+        "median": 9.0,
+        "q1": 5.0,
+        "q3": 12.0
+      },
+      "karstic": {
+        "n": 12,
+        "n_censored": 8,
+        "median": 15.5,
+        "q1": 6.5,
+        "q3": 23.0
+      }
+    },
+    "kruskal": {
+      "H": 8.488,
+      "p": 0.014351081664744185,
+      "groups_tested": [
+        "porous",
+        "fissured",
+        "karstic"
+      ]
+    },
+    "order_fastest_to_slowest": [
+      "fissured",
+      "porous",
+      "karstic"
+    ]
+  }
+}
