@@ -45,7 +45,12 @@ deep-drawdown.
 | [france-geojson](https://github.com/gregoiredavid/france-geojson) | Metropolitan and département boundaries | Licence Ouverte |
 
 The BDLISA licence is **non-commercial** (CC BY-NC-SA); derived products inherit that
-restriction.
+restriction. Verified against the official *BDLISA version 3 — Descriptif de livraison*
+(BRGM & Sandre, 08/09/2022), which states `Droits d'usage:
+http://creativecommons.org/licenses/by-nc-sa/2.0/fr` and that the reference is
+"diffusée gratuitement pour tout tiers sous condition d'une utilisation non
+commerciale". Note this is an explicit exception to the Sandre site-wide notice, which
+otherwise places content under Licence Etalab 2.0.
 
 ## Reproducing
 
