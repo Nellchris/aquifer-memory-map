@@ -19,7 +19,7 @@ PREVIEW = POSTER / "poster_preview.png"
 # A1 portrait.
 WIDTH_MM, HEIGHT_MM = 594, 841
 CSS_PX_PER_MM = 96 / 25.4           # CSS reference pixel
-PREVIEW_SCALE = 0.5                 # preview only; the PDF is the print master
+PREVIEW_SCALE = 1.0                 # preview only; the PDF is the print master
 
 
 def main():
@@ -41,7 +41,12 @@ def main():
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page(viewport={"width": width_px, "height": height_px})
-        page.goto(url, wait_until="networkidle")
+        # "networkidle" is unreliable for a local file with several large
+        # images; wait for decode completion explicitly instead.
+        page.goto(url, wait_until="load", timeout=120_000)
+        page.wait_for_function(
+            "() => Array.from(document.images).every(i => i.complete)",
+            timeout=120_000)
         page.emulate_media(media="print")
 
         # Fail loudly rather than shipping a poster with missing figures.
@@ -94,13 +99,18 @@ def main():
 
         browser.close()
 
-        # Preview: a second pass at a reduced device scale factor.
-        browser = p.chromium.launch()
+        # Preview. LCD subpixel antialiasing tints small dark text at reduced
+        # scales, which made black body copy look orange in review; disable it
+        # so the preview represents the PDF honestly.
+        browser = p.chromium.launch(args=["--disable-lcd-text"])
         context = browser.new_context(
             viewport={"width": width_px, "height": height_px},
             device_scale_factor=PREVIEW_SCALE)
         page = context.new_page()
-        page.goto(url, wait_until="networkidle")
+        page.goto(url, wait_until="load", timeout=120_000)
+        page.wait_for_function(
+            "() => Array.from(document.images).every(i => i.complete)",
+            timeout=120_000)
         page.screenshot(path=str(PREVIEW), full_page=False)
         print("  wrote {} ({:.1f} MB, scale {})".format(
             PREVIEW.name, PREVIEW.stat().st_size / 1e6, PREVIEW_SCALE))

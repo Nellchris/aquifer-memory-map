@@ -1,187 +1,121 @@
-# Aquifer Memory Map
+# Aquifer Memory
 
-Scientific poster on how French aquifer types (porous, fissured, karstic)
-recovered from the 2022 European drought, from Hub'Eau piezometry and the
-BDLISA aquifer classification.
+**Groundwater Recovery from the 2022 European Drought across French Aquifer Types**
 
-## Status: gate check GO
+Nelson Christopher · 2026
 
-Station counts are in, from a Hub'Eau fetch run in Google Colab
-(`scripts/colab_fetch_stations.py`) because Hub'Eau is unreachable from this
-machine. 7080 stations with >= 120 measurements; after the BDLISA join and an
-approximate date filter:
+[**Download the A1 poster (PDF, 10.6 MB)**](poster/poster.pdf) · [preview PNG](poster/poster_preview.png)
 
-| Group | With BDLISA | Record filter | Final | Metropolitan |
-|---|---|---|---|---|
-| porous | 2873 | 2272 | 970 | 956 |
-| fissured | 657 | 548 | 332 | 260 |
-| karstic | 219 | 141 | 105 | **104** |
+---
 
-**GO** — all three groups are far above the 25-station threshold. Karstic is the
-binding group, as the entity-level distribution predicted, but with 104
-metropolitan stations it has ample headroom.
+## Abstract
 
-The gate is taken on the metropolitan column. The Hub'Eau fetch is France-wide,
-so it includes 290 stations in Reunion, Guadeloupe, Martinique, Mayotte and
-Guyane, which were not in the 2022 European drought at all — Reunion is in the
-southern hemisphere. They fall almost entirely in the fissured group (72 of 332,
-22%), because Reunion's volcanic formations are coded fissured, so leaving them
-in would have quietly mixed tropical volcanic aquifers into the European
-fissured signal.
+The 2022 European drought drove groundwater levels to historic lows across France.
+How quickly an aquifer recovers depends on its hydraulic properties — transmissivity,
+storage coefficient and recharge mechanism — but empirical comparison of recovery
+rates across aquifer types at national scale is limited. This study analyses 1,201
+piezometers from the French national monitoring network, classified by aquifer medium
+(porous, fissured, karstic) using the BDLISA v3 reference system, and measures the time
+from each station's drought minimum until its water table returned to its 2000–2019
+monthly normal. Pooled median recovery was 6 months for fissured aquifers, 8 for porous
+and 12 for karstic, with all pairwise log-rank comparisons significant (*p* < 0.02).
+Because karst water tables vary far more than porous ones, severity was standardised by
+each station's own normal-band IQR before stratified comparison; fissured aquifers
+remained fastest in every severity band (Kruskal–Wallis *p* < 0.05), and the apparent
+reversal seen when matching on absolute metres did not survive standardisation. 110
+stations (9%) had still not recovered by December 2025, disproportionately karstic and
+deep-drawdown.
 
-The date filter is approximate: it uses the station metadata's first and last
-measurement dates, so it says nothing about gaps inside the window.
-`04_drought_filter.py` does the real gap check on the time series.
+## Figures
 
-Run `python scripts/00_check_connectivity.py` to see whether Hub'Eau is
-reachable before trying anything that calls it directly from here.
-
-### What is blocked
-
-| Host | DNS | TCP 443 | TLS |
-|---|---|---|---|
-| `hubeau.eaufrance.fr` | 217.108.210.220 | connects | **handshake reset** |
-| `bdlisa.eaufrance.fr` | 217.108.210.220 | connects | **handshake reset** |
-| `www.brgm.fr`, `infoterre.brgm.fr`, `ades.eaufrance.fr` | 193.56.4.x | **refused** | - |
-| `services.sandre.eaufrance.fr`, `api.sandre.eaufrance.fr` | 195.220.97.x | connects | OK |
-| `www.data.gouv.fr` (control) | 37.59.183.x | connects | OK |
-
-The reset arrives immediately after the TLS ClientHello, on every client tried
-(Python/OpenSSL, curl/schannel, the Chromium-based browser pane, and a
-server-side fetch), at both TLS 1.2 and 1.3, with and without ALPN. Plain HTTP
-to port 80 succeeds and returns the normal 301 to HTTPS, so the host is up and
-routable; it is the TLS session that is being killed. Two different IP ranges
-are affected while a third French government host on a third range works, so
-this is name-based (SNI) filtering between this machine and BRGM, not an API
-outage and not something the scripts can route around.
-
-Things to try, roughly in order:
-
-1. Turn off HTTPS/SSL inspection in any local antivirus or endpoint security.
-2. Allow `*.eaufrance.fr` and `*.brgm.fr` on the network firewall.
-3. Run from another network, or over a VPN.
-4. Confirm the API itself is healthy at
-   <https://api.gouv.fr/les-api/api_hubeau_piezometrie>.
-
-There is no usable mirror. The data.gouv.fr catalogue entries for piezometry
-are link-only records pointing back at the same blocked hosts.
-
-## What is done and verified
-
-The BDLISA half of the pipeline is finished, because BDLISA is also published
-through Sandre, which is reachable.
-
-**The aquifer medium is not on the station record.** Hub'Eau station responses
-carry `codes_bdlisa` (a list of BDLISA entity codes) and `urns_bdlisa`, but no
-medium. The medium is the `MilieuEH` attribute of the BDLISA entity, coded
-against Sandre nomenclature 353. So the join is
-`station.codes_bdlisa` -> `BDLISA.CodeEH` -> `MilieuEH` -> group; no shapefile
-or spatial join is needed for stations that carry a code.
-
-**Nomenclature 353 has 13 values, not 3.** Fetched live from
-`api.sandre.eaufrance.fr/referentiels/v1/nsa/353.json`:
-
-| Code | Label | Group used here |
-|---|---|---|
-| 1 | Milieu poreux | porous |
-| 2 | Milieu fissure | fissured |
-| 3 | Milieu karstique | karstic |
-| 6 | Double porosite : de fractures et/ou de fissures | fissured |
-| 4, 5, 7, 8, 9 | double/triple porosity combinations | **excluded (mixed)** |
-| 0, X, 10, 11 | Inconnu, Sans objet, Multi-milieux, Fracture | excluded (unknown) |
-
-Codes 4, 5, 7, 8 and 9 mix a matrix or a karst network with something else. A
-station in a matrix-and-karst entity cannot characterise either medium's
-drought response, so they are not assigned to a group. That exclusion is the
-main methodological cost of the three-way design and belongs in the poster's
-limitations.
-
-**Entity-level distribution** (BDLISA v3, 2636 metropolitan level-3 entities)
-— the denominator the station counts should be read against:
-
-| Group | Entities | Share |
-|---|---|---|
-| fissured | 902 | 34% |
-| porous | 893 | 34% |
-| mixed (excluded) | 491 | 19% |
-| karstic | 347 | 13% |
-| unknown | 3 | 0% |
-
-Karstic is the scarce group at entity level, so it is the one most likely to
-fail the gate. Two further findings: `MilieuEH` 10 ("Multi-milieux") appears
-exactly once in all of BDLISA v3 and 11 ("Fracture") not at all, so level-1 and
-level-2 entities do carry a definite medium and a station referencing only a
-coarse entity can still be grouped — `classify_codes` flags those `level2_only`
-so they can be excluded later if the poster requires level-3 precision.
-
-Two independent Sandre routes were checked against each other and agree
-field-for-field on the sample obtained before the bulk request timed out.
+| | | |
+|:--:|:--:|:--:|
+| <img src="figures/fig1_map_recovery.png" width="260"><br>**Fig 1.** Recovery time | <img src="figures/fig7_map_medium.png" width="260"><br>**Fig 7.** Station network by medium | <img src="figures/fig8_map_severity.png" width="260"><br>**Fig 8.** Drought severity |
+| <img src="figures/fig2_depth_matched.png" width="260"><br>**Fig 2.** Severity-matched recovery | <img src="figures/fig3_kaplan_meier.png" width="260"><br>**Fig 3.** Kaplan–Meier curves | <img src="figures/fig4_boxplot.png" width="260"><br>**Fig 4.** Pooled comparison |
+| <img src="figures/fig5_method_inset.png" width="260"><br>**Fig 5.** Method definitions | <img src="figures/fig6_cross_section.png" width="260"><br>**Fig 6.** Aquifer media schematic | |
 
 ## Data sources
 
-| What | Where | Size |
+| Source | Used for | Licence |
 |---|---|---|
-| Entity attribute table | `.../BDLISA/3/BDLISA_V3/CSV/TME.csv` | 0.5 MB |
-| Entity polygons (spatial fallback) | `.../BDLISA/3/EntiteHydroGeol/GPKG/EntiteHydroGeol_FXX.gpkg` | 114 MB |
-| Medium nomenclature | `api.sandre.eaufrance.fr/referentiels/v1/nsa/353.json` | 5 KB |
+| [Hub'Eau Piézométrie API](https://hubeau.eaufrance.fr/page/api-piezometrie) | Station metadata and piezometric time series | Licence Ouverte 2.0 (Etalab) |
+| [BDLISA v3](https://bdlisa.eaufrance.fr/) via [Sandre](https://services.sandre.eaufrance.fr/) | Aquifer entity reference and `MilieuEH` medium classification | CC BY-NC-SA 2.0 FR |
+| [Sandre nomenclature 353](https://api.sandre.eaufrance.fr/referentiels/v1/nsa/353.json) | Medium code definitions | CC BY-NC-SA 2.0 FR |
+| [Natural Earth](https://www.naturalearthdata.com/) | 1:10m shaded relief basemap | Public domain |
+| [france-geojson](https://github.com/gregoiredavid/france-geojson) | Metropolitan and département boundaries | Licence Ouverte |
 
-all under `https://services.sandre.eaufrance.fr/telechargement/geo/SAQ/`.
+The BDLISA licence is **non-commercial** (CC BY-NC-SA); derived products inherit that
+restriction.
 
-`TME.csv` is the whole v3 entity table (3903 rows: 187 level-1, 966 level-2,
-2750 level-3) with no geometry. The same layer is also served as WFS
-`sa:EntiteHydroGeol_FXX` from `services.sandre.eaufrance.fr/geo/sandre`, but
-`PROPERTYNAME` there does not drop geometry, which makes an attributes-only
-request about 240 MB — it timed out. Use the CSV.
+## Reproducing
 
-## Scripts
+Requires Python 3.11+ with `requests`, `pandas`, `numpy`, `scipy`, `geopandas`,
+`rasterio`, `matplotlib`, `playwright` and `segno`.
 
-Numbered scripts form the pipeline; run them in order.
-
-| Script | Needs Hub'Eau | Does |
-|---|---|---|
-| `00_check_connectivity.py` | no | reachability, separating DNS / TCP / TLS failure |
-| `01_explore_api.py` | **yes** | dumps the live station and chronique schema to `data/api_schema.json` |
-| `02_fetch_stations.py` | **yes** | all stations with `nb_mesures_piezo_min=120` -> `data/stations_raw.json` |
-| `03_classify_bdlisa.py` | no (needs 02's output) | code join, then spatial fallback -> `data/stations_classified.csv` |
-| `03a_bdlisa_check.py` | no | verifies the join logic, writes `data/bdlisa_medium_distribution.json` |
-| `04_drought_filter.py` | **yes** | drought-window coverage per group, prints the gate table -> `data/station_counts.json` |
-
-`hubeau.py` and `bdlisa.py` are the shared modules. `bdlisa.MEDIUM_GROUPS` is
-the single place the grouping decision lives.
-
-`03a_bdlisa_check.py` runs today and passes. Under the block, `01` and `02`
-exit 2 with the failing URL and a pointer to `00`; `03` and `04` exit 1 naming
-the upstream output they are missing. Verified: no script fails silently.
-
-### Run order once Hub'Eau is reachable
-
-```
-python scripts/00_check_connectivity.py
-python scripts/01_explore_api.py        # check field names before trusting 02-04
-python scripts/02_fetch_stations.py
-python scripts/03_classify_bdlisa.py
-python scripts/04_drought_filter.py     # prints the GATE CHECK table
+```bash
+pip install requests pandas numpy scipy geopandas rasterio matplotlib playwright segno
+python -m playwright install chromium
 ```
 
-Check `data/api_schema.json` against the field names `02`-`04` use
-(`codes_bdlisa`, `nb_mesures_piezo`, `date_debut_mesure`, `date_fin_mesure`,
-`lat`/`lon`, `date_mesure`). Those come from the API documentation and from the
-R and Python client packages, not from a live response, so they are the most
-likely thing to need a fix. `02` and `03` degrade loudly rather than silently if
-a name is wrong.
+Scripts run in numeric order. Those marked **Colab** must be run from a network that can
+reach `hubeau.eaufrance.fr`; see [docs/pipeline-notes.md](docs/pipeline-notes.md) for why.
 
-## Filter parameters
+| Script | Does |
+|---|---|
+| `00_check_connectivity.py` | Reachability of Hub'Eau, BDLISA and Sandre, separating DNS / TCP / TLS failure |
+| `01_explore_api.py` | Dumps the live Hub'Eau station and chronicle schema |
+| `02_fetch_stations.py` | All stations with ≥120 measurements → `data/stations_raw.json` |
+| `colab_fetch_stations.py` | **Colab** equivalent of `02`, producing `stations_output.zip` |
+| `03_classify_bdlisa.py` | Joins stations to BDLISA medium, with a spatial fallback |
+| `03a_bdlisa_check.py` | Verifies the join logic; writes the entity-level medium distribution |
+| `03b_classify_from_colab.py` | Classification from the Colab output → `data/stations_classified.csv` |
+| `04_drought_filter.py` | Drought-window coverage check and the station-count gate |
+| `colab_02_fetch_chroniques.py` | **Colab** time-series fetch → `chroniques_output.zip` |
+| `05_analyse_recovery.py` | Monthly levels, normals, drought minimum, recovery, Kruskal–Wallis + Dunn |
+| `05a_sensitivity.py` | Robustness of the result to the recovery rule and to drought depth |
+| `05b_survival.py` | Kaplan–Meier medians and pairwise log-rank |
+| `05c_standardised.py` | Severity standardised by each station's normal-band IQR |
+| `05d_update_stats.py` | Merges the standardised results into `data/stats_summary.json` |
+| `06_figures.py` | Figures 2–5 |
+| `07_cross_section.py` | Figure 6, the conceptual cross-section |
+| `08_figure_checklist.py` | Confirms all eight figures exist at 300 dpi |
+| `09_maps.py` | Figures 1, 7 and 8 on a shaded-relief basemap |
+| `11_render_poster.py` | Renders `poster/poster.html` to A1 PDF and preview PNG |
 
-- record length: `nb_mesures_piezo_min=120` (~10 years of monthly data)
-- drought window: 2022-06-01 to 2025-12-31
-- maximum gap inside the window: 62 days
-- gate: GO if every group >= 25, WATCH at 20-24, NO-GO below 20
+Poster assets are built at print resolution with two environment hooks:
 
-`04` tests a 20-station sample per group (seed 20220601) and extrapolates the
-pass rate to the full group, so its drought column is an estimate; the sample
-size and seed are recorded in `data/station_counts.json`.
+```bash
+POSTER_SVG=1 python scripts/06_figures.py        # vector figures for the poster
+POSTER_SVG=1 python scripts/07_cross_section.py
+POSTER_DPI=600 python scripts/09_maps.py         # 600 dpi rasters for the maps
+python scripts/11_render_poster.py
+```
+
+Large inputs are not committed — the chronicle archive (368 MB), the Natural Earth
+relief raster (131 MB) and the BDLISA download are regenerated by the scripts above.
+
+## Method summary
+
+- **Normals**: median, p25 and p75 per calendar month over 2000–2019, requiring ≥10
+  reference years in every month.
+- **Drought minimum**: lowest monthly median between June 2022 and March 2023.
+- **Recovery**: first of two consecutive months at or above the calendar-month normal.
+  Stations not recovered by December 2025 are right-censored.
+- **Primary test**: Kaplan–Meier with pairwise log-rank, Bonferroni-corrected, since
+  censoring differs by group (karstic 15%, porous 11%, fissured 2%).
+- **Confound control**: severity standardised by each station's normal-band IQR, because
+  the median IQR runs 0.47 m (porous) to 0.87 m (karstic) and absolute metres are not
+  comparable across media.
+
+## Limitations
+
+Pumping influence is not controlled; production wells may distort the recovery signal.
+A single drought event may not generalise. The severe karstic stratum rests on 12
+uncensored stations of 20. Aquifer medium correlates with climate, depth and thickness,
+so association is not causation. BDLISA boundaries are generalised, and mixed-porosity
+entities (19% of level-3 entities) are excluded by design.
 
 ## Licence
 
-BDLISA and Hub'Eau data are published by BRGM / Eaufrance under the Licence
-Ouverte (Etalab).
+Code: MIT. Figures and poster: CC BY 4.0. Underlying BDLISA data remains CC BY-NC-SA
+2.0 FR, which restricts commercial reuse of derived products.

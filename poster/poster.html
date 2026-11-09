@@ -5,14 +5,14 @@
 <title>Aquifer Memory — A1 poster</title>
 <style>
 /* ---------------------------------------------------------------------------
-   A1 portrait, 594 x 841 mm. All sizing is in mm so the printed result is
-   deterministic; figure heights are set explicitly and widths follow from each
-   figure's own aspect ratio, which is what keeps the rows from overflowing.
+   A1 portrait, 594 x 841 mm, standard scientific poster structure:
+   Introduction -> Data & Methods -> Results -> Discussion -> Conclusions ->
+   References. Figures span the full width between the opening text band and
+   the closing one, so the sheet reads in scientific order top to bottom.
 
-   Type is DejaVu Sans rather than Helvetica. The figures were rendered in
-   DejaVu Sans, and matching them makes the whole sheet typographically
-   consistent; Helvetica/Arial here would leave figure labels visibly different
-   from poster text. Arial is the fallback.
+   All sizing is in mm. Figure widths follow from each figure's own aspect
+   ratio against an explicit height, which is what keeps rows from overflowing.
+   Type is DejaVu Sans to match the figures; Arial is the fallback.
 --------------------------------------------------------------------------- */
 @page { size: 594mm 841mm; margin: 0; }
 
@@ -24,244 +24,236 @@
   --porous:     #2a78d6;
   --fissured:   #eb6834;
   --karstic:    #1baf7a;
-  --surface:    #ffffff;
 }
 
 * { box-sizing: border-box; }
+figure { margin: 0; }
 
 html, body {
-  margin: 0;
-  padding: 0;
-  background: var(--surface);
-  color: var(--ink);
+  margin: 0; padding: 0;
+  background: #fff; color: var(--ink);
   font-family: "DejaVu Sans", Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 .page {
-  width: 594mm;
-  height: 841mm;
-  padding: 16mm;
-  display: flex;
-  flex-direction: column;
-  gap: 12mm;
+  width: 594mm; height: 841mm; padding: 15mm;
+  display: flex; flex-direction: column; gap: 4mm;
   overflow: hidden;
 }
 
-/* ------------------------------------------------------------- title bar */
-.titlebar { border-bottom: 0.5mm solid var(--ink); padding-bottom: 4mm; }
+/* --------------------------------------------------------------- title */
+.titlebar { border-bottom: 0.5mm solid var(--ink); padding-bottom: 3mm; }
+h1 { margin: 0 0 2mm 0; font-size: 33pt; line-height: 1.08; font-weight: 700;
+     letter-spacing: -0.01em; }
+.subtitle { margin: 0 0 2mm 0; font-size: 15pt; line-height: 1.25;
+            color: var(--ink-2); }
+.byline { font-size: 11pt; color: var(--ink-3); letter-spacing: 0.02em; }
 
-h1 {
-  margin: 0 0 2.5mm 0;
-  font-size: 36pt;
-  line-height: 1.07;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-.subtitle {
-  margin: 0 0 3mm 0;
-  font-size: 16pt;
-  line-height: 1.25;
-  color: var(--ink-2);
-  max-width: 480mm;
-}
-
-.byline {
-  font-size: 11pt;
-  color: var(--ink-3);
-  letter-spacing: 0.02em;
-}
-
-/* ----------------------------------------------------------------- rows */
-.row { display: flex; gap: 10mm; align-items: flex-start; }
-.row-stats { gap: 8mm; }
-
-/* figure carries a 40px UA margin by default, which silently widened every
-   column and pushed the last figure in each row off the sheet. */
-figure { margin: 0; }
-
-/* Each .fig is pinned to its column width so the caption wraps inside the
-   column instead of setting the column's width from its longest line. */
-.fig { display: flex; flex-direction: column; align-items: center; }
-.fig img { display: block; max-width: 100%; }
-
-figcaption {
-  font-size: 9pt;
-  line-height: 1.35;
-  color: var(--ink-2);
-  margin-top: 2mm;
-  text-align: left;
-  width: 100%;
-}
-figcaption b { color: var(--ink); font-weight: 700; }
-
-/* Row 1 — maps. fig1 is the hero; fig7/fig8 stack beside it. */
-.row-maps .hero        { width: 400mm; }
-.row-maps .hero img    { width: 400mm; height: 299mm; }
-.row-maps .stack       { width: 152mm; display: flex; flex-direction: column; gap: 6mm; }
-.row-maps .stack .fig     { width: 152mm; }
-.row-maps .stack .fig img { width: 152mm; height: auto; }
-
-/* Row 2 — mechanism then magnitude. */
-.row-analysis .schematic     { width: 194mm; padding-top: 24mm; } /* optically centred */
-.row-analysis .schematic img { width: 194mm; height: 98mm; }
-.row-analysis .depth         { width: 358mm; }
-.row-analysis .depth img     { width: 358mm; height: 157mm; }
-
-/* Row 3 — statistics, three equal columns. */
-.row-stats .fig       { width: 182mm; }
-.row-stats .fig img   { width: 182mm; height: auto; }
-
-/* ------------------------------------------------------------ text block */
-.textrow { display: flex; gap: 10mm; align-items: stretch; }
-
-.panel {
-  flex: 1;
-  border-top: 0.35mm solid var(--rule);
-  padding-top: 5mm;
-}
-.panel.findings { flex: 1.25; }
-
-.panel h2 {
-  margin: 0 0 2.5mm 0;
-  font-size: 13pt;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+/* ------------------------------------------------------------ sections */
+h2 {
+  margin: 0 0 1.8mm 0; padding-bottom: 1mm;
+  border-bottom: 0.3mm solid var(--rule);
+  font-size: 12pt; font-weight: 700; letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+p { margin: 0; font-size: 10.5pt; line-height: 1.4; text-align: justify;
+    hyphens: auto; }
+.sec + .sec { margin-top: 4mm; }
 
-.panel ul { margin: 0; padding-left: 5mm; }
+/* ------------------------------------------------------------ figures */
+.row { display: flex; gap: 8mm; align-items: flex-start; justify-content: center; }
+.fig { display: flex; flex-direction: column; }
+.fig img { display: block; }
+figcaption { font-size: 8.5pt; line-height: 1.3; color: var(--ink-2);
+             margin-top: 1.5mm; width: 100%; }
+figcaption b { color: var(--ink); font-weight: 700; }
 
-.panel li {
-  font-size: 11pt;
-  line-height: 1.42;
-  margin-bottom: 1.8mm;
-  color: var(--ink);
-}
-.panel.limits li { color: var(--ink-2); font-size: 10.5pt; }
+/* Opening band: Introduction | Data & Methods | method inset. */
+.band-top .col-intro   { width: 172mm; }
+.band-top .col-methods { width: 172mm; }
+.band-top .col-inset   { width: 190mm; }
+.band-top .col-inset img { width: 190mm; height: 108mm; }
 
-.lede { font-weight: 700; }
+/* Results: maps, then statistics, then mechanism, then the matched result. */
+.row-maps .m1 img { height: 136mm; width: auto; }
+.row-maps .m2 img { height: 136mm; width: auto; }
+.row-maps .m3 img { height: 136mm; width: auto; }
+.row-maps .m1 { width: 182mm; }
+.row-maps .m2 { width: 134mm; }
+.row-maps .m3 { width: 186mm; }
+
+.row-stats .s img { height: 118mm; width: auto; }
+.row-stats .s1 { width: 170mm; }
+.row-stats .s2 { width: 162mm; }
+.row-stats .results { width: 192mm; }
+
+.row-xsec .fig img  { width: 250mm; height: 127mm; }
+.row-xsec .fig      { width: 250mm; }
+.row-depth .fig img { width: 375mm; height: 164mm; }
+.row-depth .fig     { width: 375mm; }
+
+/* Closing band: Discussion | Conclusions | References. */
+.band-bottom .col-disc { width: 206mm; }
+.band-bottom .col-conc { width: 172mm; }
+.band-bottom .col-refs { width: 156mm; }
+
+ol.refs { margin: 0; padding-left: 5mm; }
+ol.refs li { font-size: 8.5pt; line-height: 1.32; color: var(--ink-2);
+             margin-bottom: 1.2mm; }
+
 .c-porous   { color: var(--porous);   font-weight: 700; }
 .c-fissured { color: var(--fissured); font-weight: 700; }
 .c-karstic  { color: var(--karstic);  font-weight: 700; }
 
-/* ----------------------------------------------------------------- footer */
+/* --------------------------------------------------------------- footer */
 .footer {
-  margin-top: auto;
-  border-top: 0.5mm solid var(--ink);
-  padding-top: 3mm;
-  display: flex;
-  gap: 8mm;
-  align-items: center;
-  justify-content: space-between;
+  margin-top: auto; border-top: 0.5mm solid var(--ink); padding-top: 2.5mm;
+  display: flex; gap: 8mm; align-items: center; justify-content: space-between;
 }
-
-.footer .sources { font-size: 9.5pt; line-height: 1.45; color: var(--ink-2); }
-.footer .repo    { font-size: 10.5pt; color: var(--ink); margin-top: 1.5mm; }
-.footer .qr      { display: flex; align-items: center; gap: 4mm; }
-.footer .qr img  { width: 26mm; height: 26mm; }
-.footer .qr span { font-size: 9pt; color: var(--ink-3); writing-mode: vertical-rl; }
+.footer .sources { font-size: 9pt; line-height: 1.4; color: var(--ink-2); }
+.footer .repo { font-size: 10pt; color: var(--ink); margin-top: 1mm; }
+.footer img { width: 24mm; height: 24mm; }
 </style>
 </head>
 <body>
 <div class="page">
 
-  <!-- 1 ------------------------------------------------------- title bar -->
   <header class="titlebar">
-    <h1>Aquifer Memory: How France&rsquo;s Groundwater Recovered from the 2022 Drought</h1>
+    <h1>Aquifer Memory: Groundwater Recovery from the 2022 European Drought
+        across French Aquifer Types</h1>
     <p class="subtitle">Fissured aquifers recovered fastest regardless of drought severity;
       recovery time governed primarily by drought depth, not aquifer medium alone</p>
-    <div class="byline">Geodel &middot; GroundwatCH Programme &middot; November 2026</div>
+    <div class="byline">Nelson Christopher &middot; 2026</div>
   </header>
 
-  <!-- 2 ------------------------------------------------------- maps row -->
-  <section class="row row-maps">
-    <figure class="fig hero">
-      <img src="../figures/fig1_map_recovery@600.png" alt="Map of recovery time across metropolitan France">
-      <figcaption><b>Fig 1.</b> Months from each station&rsquo;s drought minimum until the
-        water table returned to its 2000&ndash;2019 monthly normal. Grey crosses mark the 110
-        stations still below normal in December 2025.</figcaption>
-    </figure>
-    <div class="stack">
-      <figure class="fig">
-        <img src="../figures/fig7_map_medium@600.png" alt="Station network coloured by aquifer medium">
-        <figcaption><b>Fig 7.</b> The 1,201 analysed stations by BDLISA medium. Fissured
-          follows the crystalline basement, karstic the limestone massifs.</figcaption>
-      </figure>
-      <figure class="fig">
-        <img src="../figures/fig8_map_severity@600.png" alt="Map of drought severity">
-        <figcaption><b>Fig 8.</b> Departure from normal at the drought minimum. Severity
-          clusters geographically, which is why it must be controlled for.</figcaption>
-      </figure>
+  <!-- ===================== INTRODUCTION / METHODS ===================== -->
+  <section class="row band-top">
+    <div class="col-intro sec">
+      <h2>Introduction</h2>
+      <p>The 2022 European drought drove groundwater levels to historic lows across
+        France. How quickly aquifers recover depends on their hydraulic properties
+        &mdash; transmissivity, storage coefficient, and recharge mechanism &mdash; but
+        empirical comparison of recovery rates across aquifer types at national scale is
+        limited. We analyse 1,201 piezometers from the French national monitoring
+        network, classified by aquifer medium (porous, fissured, karstic) using the
+        BDLISA v3 reference system, to test whether medium predicts recovery time from
+        the 2022 drought minimum.</p>
     </div>
-  </section>
-
-  <!-- 3 --------------------------------------------------- analysis row -->
-  <section class="row row-analysis">
-    <figure class="fig schematic">
-      <img src="../figures/fig6_cross_section.svg" alt="Cross-section of the three aquifer media">
-      <figcaption><b>Fig 6.</b> Why the media differ: pore space, fractures and conduits
-        store and transmit water on different timescales.</figcaption>
-    </figure>
-    <figure class="fig depth">
-      <img src="../figures/fig2_depth_matched.svg" alt="Recovery time within standardised severity bands">
-      <figcaption><b>Fig 2.</b> Recovery within bands of severity standardised by each
-        station&rsquo;s own normal-band IQR. Fissured is fastest in all three bands; the ranking
-        does not reverse.</figcaption>
-    </figure>
-  </section>
-
-  <!-- 4 ------------------------------------------------------ stats row -->
-  <section class="row row-stats">
-    <figure class="fig">
-      <img src="../figures/fig3_kaplan_meier.svg" alt="Kaplan-Meier recovery curves">
-      <figcaption><b>Fig 3.</b> Kaplan&ndash;Meier estimate, which retains the censored
-        stations. Log-rank separates all three media.</figcaption>
-    </figure>
-    <figure class="fig">
-      <img src="../figures/fig4_boxplot.svg" alt="Pooled recovery time by medium">
-      <figcaption><b>Fig 4.</b> Pooled comparison (unadjusted for severity).
-        Porous&ndash;fissured <i>ns</i> reflects mixing of severity levels; see Fig 2 for the
-        stratified result and Fig 3 for the censoring-aware test.</figcaption>
-    </figure>
-    <figure class="fig">
+    <div class="col-methods sec">
+      <h2>Data &amp; Methods</h2>
+      <p>Piezometric time series from Hub&rsquo;Eau Pi&eacute;zom&eacute;trie API; aquifer
+        classification from BDLISA v3 via Sandre. Monthly normals computed over a
+        2000&ndash;2019 reference period. Recovery: first month after the drought minimum
+        (Jun 2022&ndash;Mar 2023) where the water table returns to or exceeds its monthly
+        normal for two consecutive months. Stations not recovered by December 2025 are
+        right-censored. Primary test: Kaplan-Meier survival analysis with pairwise
+        log-rank tests (Bonferroni-corrected). Secondary: Kruskal-Wallis H-test with
+        Dunn&rsquo;s post-hoc. Confound control: depth-matched comparison with severity
+        standardised by each station&rsquo;s normal-band IQR.</p>
+    </div>
+    <figure class="fig col-inset">
       <img src="../figures/fig5_method_inset.svg" alt="Method: how recovery time is measured">
       <figcaption><b>Fig 5.</b> Definitions: the normal band, the drought minimum, and the
         recovery point that sets recovery time.</figcaption>
     </figure>
   </section>
 
-  <!-- 5, 6 ------------------------------------------ findings + limits -->
-  <section class="textrow">
-    <div class="panel findings">
-      <h2>Key findings</h2>
-      <ul>
-        <li><span class="c-fissured">Fissured</span> aquifers recovered in <b>6 months</b>
-          (median), <span class="c-porous">porous</span> in <b>8</b>,
-          <span class="c-karstic">karstic</span> in <b>12</b>.</li>
-        <li>Fissured was fastest in <b>every severity stratum</b> (p &lt; 0.05 in each);
-          no ranking reversal once severity is standardised by station variability.</li>
-        <li><b>110 of 1,201 stations (9%)</b> had not recovered by December 2025 &mdash;
-          disproportionately karstic and deep-drawdown.</li>
-      </ul>
-    </div>
-    <div class="panel limits">
-      <h2>Limitations</h2>
-      <ul>
-        <li>Pumping influence not controlled; production wells may distort the recovery
-          signal.</li>
-        <li>A single drought event &mdash; results may not generalise.</li>
-        <li>The severe karstic cell rests on n=12 uncensored of 20 (8 censored); that
-          median is likely an underestimate.</li>
-        <li>Association is not causation: medium correlates with climate, depth and
-          thickness.</li>
-        <li>BDLISA boundary generalisation; mixed-porosity entities (19%) excluded.</li>
-      </ul>
+  <!-- ============================= RESULTS ============================ -->
+  <section class="row row-maps">
+    <figure class="fig m1">
+      <img src="../figures/fig1_map_recovery@600.png" alt="Map of recovery time across metropolitan France">
+      <figcaption><b>Fig 1.</b> Months from each station&rsquo;s drought minimum until the
+        water table returned to its 2000&ndash;2019 monthly normal.</figcaption>
+    </figure>
+    <figure class="fig m2">
+      <img src="../figures/fig7_map_medium@600.png" alt="Station network coloured by aquifer medium">
+      <figcaption><b>Fig 7.</b> The 1,201 analysed stations by BDLISA medium.</figcaption>
+    </figure>
+    <figure class="fig m3">
+      <img src="../figures/fig8_map_severity@600.png" alt="Map of drought severity">
+      <figcaption><b>Fig 8.</b> Departure from normal at the drought minimum; severity
+        clusters geographically.</figcaption>
+    </figure>
+  </section>
+
+  <section class="row row-stats">
+    <figure class="fig s s1">
+      <img src="../figures/fig3_kaplan_meier.svg" alt="Kaplan-Meier recovery curves">
+      <figcaption><b>Fig 3.</b> Kaplan&ndash;Meier estimate, retaining censored stations.
+        Log-rank separates all three media.</figcaption>
+    </figure>
+    <figure class="fig s s2">
+      <img src="../figures/fig4_boxplot.svg" alt="Pooled recovery time by medium">
+      <figcaption><b>Fig 4.</b> Pooled comparison (unadjusted for severity).
+        Porous&ndash;fissured <i>ns</i> reflects mixing of severity levels; see Fig 2 for
+        the stratified result and Fig 3 for the censoring-aware test.</figcaption>
+    </figure>
+    <div class="results sec">
+      <h2>Results</h2>
+      <p>Pooled median recovery: <span class="c-fissured">fissured</span> 6 months,
+        <span class="c-porous">porous</span> 8, <span class="c-karstic">karstic</span> 12
+        (all pairwise log-rank <i>p</i> &lt; 0.02). Within severity-matched strata,
+        fissured is fastest in every band (Kruskal-Wallis <i>p</i> &lt; 0.05). No ranking
+        reversal when severity is standardised by station variability. 110 stations (9%)
+        had not recovered by December 2025 &mdash; disproportionately karstic and
+        deep-drawdown.</p>
     </div>
   </section>
 
-  <!-- 7 ---------------------------------------------------------- footer -->
+  <section class="row row-xsec">
+    <figure class="fig">
+      <img src="../figures/fig6_cross_section.svg" alt="Cross-section of the three aquifer media">
+      <figcaption><b>Fig 6.</b> Why the media differ: pore space, fractures and conduits
+        store and transmit water on different timescales.</figcaption>
+    </figure>
+  </section>
+
+  <section class="row row-depth">
+    <figure class="fig">
+      <img src="../figures/fig2_depth_matched.svg" alt="Recovery time within standardised severity bands">
+      <figcaption><b>Fig 2.</b> Recovery within bands of severity standardised by each
+        station&rsquo;s own normal-band IQR. Fissured is fastest in all three bands; the
+        ranking does not reverse.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============== DISCUSSION / CONCLUSIONS / REFERENCES ============= -->
+  <section class="row band-bottom">
+    <div class="col-disc sec">
+      <h2>Discussion</h2>
+      <p>Fissured aquifers&rsquo; rapid recovery is consistent with moderate transmissivity
+        and distributed fracture-network recharge &mdash; responsive to rainfall, with
+        sufficient storage to sustain recovery. Karstic systems recovered slowest despite
+        high transmissivity, likely because conduit drainage depletes storage rapidly and
+        recovery requires sustained regional recharge. Drought severity is the primary
+        predictor of recovery time, but fissured aquifers outperform in every severity
+        band, suggesting medium exerts an independent effect. Limitations include
+        uncontrolled pumping influence, a single drought event, and small karstic sample
+        sizes at high severity (n=12 uncensored).</p>
+    </div>
+    <div class="col-conc sec">
+      <h2>Conclusions</h2>
+      <p>Aquifer medium significantly predicts drought recovery time across all severity
+        strata. Fissured aquifers are the most resilient to drought; 9% of the French
+        monitoring network remains below pre-drought normals more than three years after
+        the 2022 event. These results can inform groundwater drought early-warning
+        frameworks and aquifer vulnerability mapping.</p>
+    </div>
+    <div class="col-refs sec">
+      <h2>References</h2>
+      <ol class="refs">
+        <li>Toreti, A. et al. (2022). Drought in Europe August 2022. JRC Technical
+          Report.</li>
+        <li>BRGM (2018). BDLISA v3: Base de Donn&eacute;es des Limites des Syst&egrave;mes
+          Aquif&egrave;res.</li>
+        <li>Hub&rsquo;Eau Pi&eacute;zom&eacute;trie API. https://hubeau.eaufrance.fr/</li>
+        <li>Kaplan, E.L. &amp; Meier, P. (1958). Nonparametric estimation from incomplete
+          observations. <i>JASA</i>, 53(282), 457&ndash;481.</li>
+      </ol>
+    </div>
+  </section>
+
   <footer class="footer">
     <div>
       <div class="sources">
@@ -270,9 +262,7 @@ figcaption b { color: var(--ink); font-weight: 700; }
       </div>
       <div class="repo">Code and data: github.com/nellchris/aquifer-memory-map</div>
     </div>
-    <div class="qr">
-      <img src="qr_repo.svg" alt="QR code linking to the project repository">
-    </div>
+    <img src="qr_repo.svg" alt="QR code linking to the project repository">
   </footer>
 
 </div>
