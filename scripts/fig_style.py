@@ -15,6 +15,7 @@ sequential ramp rather than the diverging scale the brief suggested; there is no
 meaningful midpoint for "months to recover" to diverge about.
 """
 
+import os
 from pathlib import Path
 
 import matplotlib as mpl
@@ -79,18 +80,42 @@ def apply_style():
         "patch.linewidth": 0.0,
         "legend.frameon": False,
         "pdf.fonttype": 42,   # embed as TrueType so text stays editable
-        "svg.fonttype": "none",
+        # Poster SVGs convert text to outlines so the printed page cannot
+        # depend on the renderer resolving DejaVu Sans; normal SVGs keep text.
+        "svg.fonttype": "path" if os.environ.get("POSTER_SVG") else "none",
     })
 
 
 def save(fig, stem, svg=False):
-    """Write <stem>.pdf and .png at 300 dpi, optionally .svg. Returns paths."""
+    """Write <stem>.pdf and .png at 300 dpi, optionally .svg. Returns paths.
+
+    Two environment hooks build the higher-resolution assets the A1 poster
+    needs, without changing any figure's design:
+
+      POSTER_SVG=1   also write <stem>.svg, vector and resolution-independent
+      POSTER_DPI=600 also write <stem>@<dpi>.png
+
+    A figure placed on A1 is often printed larger than the size it was saved
+    at, which would drop it below 300 dpi; these give the layout headroom.
+    """
     FIGURES.mkdir(exist_ok=True)
+    exts = ["pdf", "png", "svg"] if svg else ["pdf", "png"]
+    if os.environ.get("POSTER_SVG") and "svg" not in exts:
+        exts.append("svg")
+
     written = []
-    for ext in (["pdf", "png", "svg"] if svg else ["pdf", "png"]):
+    for ext in exts:
         path = FIGURES / "{}.{}".format(stem, ext)
         fig.savefig(path, dpi=300, bbox_inches="tight", facecolor=SURFACE)
         written.append(path)
+
+    poster_dpi = os.environ.get("POSTER_DPI")
+    if poster_dpi:
+        path = FIGURES / "{}@{}.png".format(stem, poster_dpi)
+        fig.savefig(path, dpi=int(poster_dpi), bbox_inches="tight",
+                    facecolor=SURFACE)
+        written.append(path)
+
     plt.close(fig)
     return written
 
